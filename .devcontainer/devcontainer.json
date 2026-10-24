@@ -1,5 +1,14 @@
 {
-	"name": "Cursor DevContainer Skill Bridge",
-    "image": "mcr.microsoft.com/vscode/devcontainers/base",
-	"service": "cursor-devcontainer-skill-bridge"
+	"name": "Cursor Skill Bridge",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": "..",
+		"args": {
+			"WORKSPACE_FOLDER_BASENAME": "${localWorkspaceFolderBasename}"
+		}
+	},
+	// "remoteUser": "vscode",
+	"mounts": [
+		"type=volume,target=/workspaces/${localWorkspaceFolderBasename}/node_modules"
+	]
 }
