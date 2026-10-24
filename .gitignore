@@ -5,3 +5,4 @@ dist-test/
 *.tsbuildinfo
 .toolchain/
 .vscode/settings.json
+.DS_Store
