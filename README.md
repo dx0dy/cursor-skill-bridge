@@ -20,7 +20,7 @@ npm test
 npm run package
 ```
 
-`npm run package` writes `cursor-skill-bridge-0.2.0.vsix`.
+`npm run package` writes `cursor-skill-bridge-1.0.0.vsix`.
 
 ## Usage
 

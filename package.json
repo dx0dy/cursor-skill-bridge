@@ -2,7 +2,7 @@
   "name": "cursor-skill-bridge",
   "displayName": "Cursor Skill Bridge",
   "description": "Copies selected Cursor skills and plugins from the host into a Dev Container.",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "publisher": "dx0dy",
   "license": "MIT",
   "repository": {
