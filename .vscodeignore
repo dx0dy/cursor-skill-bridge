@@ -1,0 +1,15 @@
+src/**
+package-lock.json
+!dist/
+!dist/**
+tsconfig.json
+tsconfig.test.json
+dist-test/**
+node_modules/**
+.git/**
+.devcontainer/**
+**/*.vsix
+.toolchain/**
+.gitignore
+.vscode/**
+scheme.png

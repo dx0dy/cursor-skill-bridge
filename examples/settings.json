@@ -1,0 +1,19 @@
+{
+  "cursorSkillBridge.autoSync": true,
+  "cursorSkillBridge.watch": true,
+  "cursorSkillBridge.folders": [
+    {
+      "path": "~/.cursor/skills/time",
+      "enabled": true
+    },
+    {
+      "path": "~/.cursor/plugins/local/example-plugin",
+      "enabled": true
+    },
+    {
+      "path": "~/projects/my-tools",
+      "target": "~/.cursor/plugins/local/my-tools",
+      "enabled": true
+    }
+  ]
+}

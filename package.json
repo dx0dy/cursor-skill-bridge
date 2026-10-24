@@ -1,0 +1,147 @@
+{
+  "name": "cursor-skill-bridge",
+  "displayName": "Cursor Skill Bridge",
+  "description": "Copies selected Cursor skills and plugins from the host into a Dev Container.",
+  "version": "0.2.0",
+  "publisher": "dx0dy",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dx0dy/cursor-skill-bridge.git"
+  },
+  "homepage": "https://github.com/dx0dy/cursor-skill-bridge",
+  "bugs": {
+    "url": "https://github.com/dx0dy/cursor-skill-bridge/issues"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Other"],
+  "extensionKind": ["ui"],
+  "main": "./dist/extension.js",
+  "activationEvents": ["onStartupFinished"],
+  "scripts": {
+    "compile": "tsc -p ./tsconfig.json",
+    "test": "tsc -p ./tsconfig.test.json && node --test dist-test/*.test.js",
+    "package": "npm run test && npm run compile && vsce package",
+    "watch": "tsc -p ./tsconfig.json --watch"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.6.2",
+    "typescript": "^5.9.3"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "cursorSkillBridge.pickItems",
+        "title": "Choose Local Cursor Skills/Plugins",
+        "category": "Cursor Skill Bridge",
+        "icon": "$(checklist)"
+      },
+      {
+        "command": "cursorSkillBridge.sync",
+        "title": "Sync Cursor Skills/Plugins",
+        "category": "Cursor Skill Bridge"
+      },
+      {
+        "command": "cursorSkillBridge.refresh",
+        "title": "Refresh Cursor Skills/Plugins",
+        "category": "Cursor Skill Bridge"
+      },
+      {
+        "command": "cursorSkillBridge.addFolder",
+        "title": "Add Cursor Sync Folder",
+        "category": "Cursor Skill Bridge"
+      },
+      {
+        "command": "cursorSkillBridge.enableGlobally",
+        "title": "Sync Cursor Item in User Settings",
+        "category": "Cursor Skill Bridge"
+      },
+      {
+        "command": "cursorSkillBridge.removeFolder",
+        "title": "Remove Cursor Sync Folder",
+        "category": "Cursor Skill Bridge"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "cursorSkillBridge.view",
+          "name": "Cursor Skills/Plugins"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "cursorSkillBridge.view",
+        "contents": "No skills or plugins were found on the host.\n[Choose discovered items](command:cursorSkillBridge.pickItems)\n[Add a folder](command:cursorSkillBridge.addFolder)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "cursorSkillBridge.pickItems",
+          "when": "view == cursorSkillBridge.view",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "cursorSkillBridge.enableGlobally",
+          "when": "view == cursorSkillBridge.view && viewItem =~ /^(item|manual)$/",
+          "group": "1_sync"
+        },
+        {
+          "command": "cursorSkillBridge.removeFolder",
+          "when": "view == cursorSkillBridge.view && viewItem == manual",
+          "group": "2_modify"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Cursor Skill Bridge",
+      "properties": {
+        "cursorSkillBridge.autoSync": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "[Show local skills and plugins](command:cursorSkillBridge.pickItems) and choose what to copy into the Dev Container.\n\nSync the selected items when a Dev Container opens."
+        },
+        "cursorSkillBridge.watch": {
+          "type": "boolean",
+          "default": true,
+          "description": "Watch the selected host folders and sync changes. If there are more than 5000 files, or watching is unavailable, sync runs only on connect and on command."
+        },
+        "cursorSkillBridge.folders": {
+          "type": "array",
+          "scope": "machine-overridable",
+          "default": [],
+          "items": {
+            "oneOf": [
+              { "type": "string" },
+              {
+                "type": "object",
+                "required": ["path"],
+                "properties": {
+                  "path": { "type": "string", "description": "Host folder. Absolute, ~/... for your home directory, or relative to a locally opened workspace. Inside a Dev Container a relative path is resolved from your home directory." },
+                  "target": {
+                    "type": "string",
+                    "description": "Container path for this folder. Required for a folder outside ~/.cursor/skills and ~/.cursor/plugins/local. If omitted, those two locations keep the same path in the container."
+                  },
+                  "enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Clear this to keep the path and skip sync."
+                  }
+                }
+              }
+            ]
+          },
+          "markdownDescription": "[Choose discovered skills and plugins](command:cursorSkillBridge.pickItems). The same list applies to every workspace from User Settings, and only to this workspace from `.vscode/settings.json`. A workspace entry for the same path overrides the user entry.\n\n`path` may be absolute, `~/...` for the host home, or relative to a locally opened workspace. Inside a Dev Container a relative path is resolved from the host home. `{ \"path\": \"/absolute/path\", \"enabled\": false }` keeps the path and turns sync off. `target` is only needed for an arbitrary folder. `~` in `target` is the container user's HOME."
+        }
+      }
+    }
+  }
+}
