@@ -22,6 +22,23 @@ npm run package
 
 `npm run package` writes `cursor-skill-bridge-1.0.0.vsix`.
 
+### Build in Docker Container
+
+Clone the repository, then build the VSIX in one command. `node_modules` stays in a Docker volume.
+
+```bash
+git clone https://github.com/dx0dy/cursor-skill-bridge.git
+cd cursor-skill-bridge
+docker run --rm \
+  -v "$PWD":/workspaces/cursor-skill-bridge \
+  -v cursor-skill-bridge-node_modules:/workspaces/cursor-skill-bridge/node_modules \
+  -w /workspaces/cursor-skill-bridge \
+  mcr.microsoft.com/devcontainers/javascript-node:24-trixie \
+  bash -c "npm ci && npm run package && chown -R $(id -u):$(id -g) dist dist-test *.vsix"
+```
+
+The same `cursor-skill-bridge-1.0.0.vsix` is written in the repository directory.
+
 ## Usage
 
 The extension discovers `~/.cursor/skills/<name>` and `~/.cursor/plugins/local/<name>` when that folder contains `.cursor-plugin/plugin.json` or `plugin.json`.
